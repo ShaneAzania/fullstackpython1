@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+			integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+			crossorigin="anonymous"
+		/>
+		<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}" />
+		<title>{{title}}</title>
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-sm navbar-light bg-light">
+			<a class="navbar-brand" href="/">{{title}}</a>
+			<button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId"
+				aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="collapsibleNavId">
+				<ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+					<li class="nav-item">
+						<a class="nav-link" href="/">Home</a>
+					</li>
+					<li class="nav-item">
+						{% if session['user_id'] %}
+							<a class="nav-link" href="/sightings_all">Dashboard</a>
+						{% endif %}
+					</li>
+					<li class="nav-item">
+						{% if session['user_id'] %}
+							<a class="nav-link" href="/user_logout">Logout</a>
+						{% else %}
+							<a class="nav-link" href="/register_login">Register / Login</a>
+						{% endif %}
+					</li>
+					<li class="nav-item">
+						<h5 class="nav-link">{{session['first_name']}}</h5>
+					</li>
+					<!-- <li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+						<div class="dropdown-menu" aria-labelledby="dropdownId">
+							<a class="dropdown-item" href="#">Action 1</a>
+							<a class="dropdown-item" href="#">Action 2</a>
+						</div>
+					</li>
+				</ul>
+				<form class="form-inline my-2 my-lg-0">
+					<input class="form-control mr-sm-2" type="text" placeholder="Search">
+					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+				</form> -->
+			</div>
+		</nav>
+		<div class="errors">
+			{% with messages = get_flashed_messages() %}<!-- declare a variable called messages -->
+			{% if messages %}<!-- check if there are any messages -->
+			{% for message in messages %}<!-- loop through the messages -->
+			<p>{{message}}</p>
+			<!-- display each message in a paragraph tag -->
+			{% endfor %} {% endif %} {% endwith %}
+		</div>
+
+		<div class="container pt-4">
+			<h2>Edit Sighting</h2>
+			<form action="/sighting_edit_form" method="post" class="row">
+				<div class="col-12 col-md-6">
+					<input type="number" name="id" id="id" value="{{sighting.id}}" readonly class="form-control w-100 d-none" value="some text" aria-describedby="helpId">
+					<div class="form-group">
+						<label for="location">Location</label>
+						<input type="text" name="location" id="location" required value="{{sighting.location}}" class="form-control w-100 d-inline-block" value="some text" aria-describedby="helpId">
+					</div>
+					<div class="form-group">
+						<label for="description">Description</label>
+						<textarea name="description" id="description" cols="30" rows="8" maxlength="255" required class="form-control w-100 d-inline-block">{{sighting.description}}</textarea>
+					</div>
+					<input type="submit" value="Update" class="btn btn-success">
+				</div>
+				<div class="col-12 col-md-6">
+					<div class="form-group">
+						<label for="date_of_sighting">Date Of Sighting</label>
+						<input type="date" name="date_of_sighting" id="date_of_sighting" required value="{{sighting.date_of_sighting}}" class="form-control w-100 d-inline-block">
+						<small id="helpId" class="text-muted">Input as "DD/MM/YYYY"</small>
+					</div>
+					<div class="form-group">
+						<label for="number_sighted">Number Sighted</label>
+						<input type="number" name="number_sighted" id="number_sighted" required value="{{sighting.number_sighted}}" class="form-control w-100 d-inline-block" value="1">
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<script src="{{ url_for('static', filename='js/boostrap.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</html>
